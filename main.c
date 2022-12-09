@@ -64,6 +64,7 @@ void debug(char *message) {
 // DE FORMA ORGANIZADA, USANDO DIFERENTES FUNÇÕES E ARQUIVOS.
 
 int main() {
+  FILE *playersArquivo;
   // Obs: As variáveis deste template foram definidas apenas para o código compilar e rodar.
   // Então, cabe a você usar as variáveis adequadas em função do que está lendo.
   char temp[MAX_LINE];   // string para leitura temporária de dados
@@ -82,6 +83,14 @@ int main() {
   - as cartas da sua mão, no formato: "HAND [ <c_1> <c_2> ... ]";
   - a carta que se encontra sobre a mesa, no formato "TABLE <c>".
 
+  */
+  scanf("PLAYERS %s %s %s %s", b1, b2, b3, b4);
+  playersArquivo = fopen( "Arquivos/players.txt", "r" ); 
+  scanf("YOU %s", me);
+  scanf("HAND [ %s %s %s %s %s %s %s %s ]");
+  scnaf("TABLE %s", cartaSobreAMesa);
+  
+  /*
   Um exemplo de dados iniciais é:
     PLAYERS b1 b2 b3
     YOU b1
