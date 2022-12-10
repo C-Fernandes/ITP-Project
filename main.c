@@ -64,13 +64,11 @@ int main()
   char temp[MAX_LINE];
   char my_id[MAX_ID_SIZE];
 
-  setbuf(stdin, NULL);  // stdin, stdout e stderr não terão buffers
-  setbuf(stdout, NULL); // assim, nada é "guardado temporariamente"
+  setbuf(stdin, NULL);  
+  setbuf(stdout, NULL); 
   setbuf(stderr, NULL);
 
   // === INÍCIO DA PARTIDA ===
-
- 
 
   /*
   Um exemplo de dados iniciais é:
@@ -80,29 +78,24 @@ int main()
   TABLE 8♦
   */
 
-  scanf("PLAYERS %[^\n]\n", temp);
-
-  debug(temp);
-
-  // Lê o identificador do próprio bot. Isso é importante para testar quando é sua vez.
-  // scanf("YOU %s\n", my_id);
-
-  // Lê as cartas iniciais que o bot tem na mão. Ex: "[ 4♥ 7♦ 2♣ J♠ A♥ 3♦ 2♣ 9♠ ]".
-  // Os caracteres especiais (♥, ♦, ♣ e ♠) são caracteres ascii estendidos e precisam de
-  // mais de um byte para armazená-los. Assim, é interesante guardá-los como strings.
-  // Obs: lembre-se de tratar os colchetes.
-  scanf("HAND [ %[^\n] ]\n", temp);
+  scanf("HAND [ %[^\n]", temp);
   char *card;
-  cartasArquivo = fopen("/Arquivos/cartas.txt", "w");
+  cartasArquivo = fopen("\Arquivos\cartas.txt", "w");
+  if(cartasArquivo != NULL){
+    printf("Abriu");
+  }else{
+    printf("Error ao abrir o arquivo");
+  }
   card = strtok(temp, " ");
   fprintf(cartasArquivo, "%s\n", card);
   while (card != NULL)
   {
     card = strtok(NULL, " ");
+    printf("Chegou aqui\n");
     fprintf(cartasArquivo, "%s\n", card);
   }
   fclose( cartasArquivo );
-
+  printf("Artquivo fechado");
   // Lê a carta aberta sobre a mesa. Ex: TABLE 8♣
   // scanf("TABLE %s\n", temp);
 
