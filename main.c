@@ -1,4 +1,4 @@
-/********************************************************************
+ha/********************************************************************
   Bot-exemplo do jogo Uno
 
   Esta é uma versão do jogo de baralho Uno, com algumas diferenças:
@@ -51,6 +51,9 @@
 #define MAX_ACTION 10
 #define MAX_ID_SIZE 10
 
+#define true 1
+#define false 0
+
 void debug(char *message)
 {
   fprintf(stderr, "%s\n", message);
@@ -61,11 +64,13 @@ int main()
 
   FILE *playersArquivo;
   FILE *cartasArquivo;
+  
   char temp[MAX_LINE];
+  char cardTable[5];
   char my_id[MAX_ID_SIZE];
 
-  setbuf(stdin, NULL);  
-  setbuf(stdout, NULL); 
+  setbuf(stdin, NULL);
+  setbuf(stdout, NULL);
   setbuf(stderr, NULL);
 
   // === INÍCIO DA PARTIDA ===
@@ -79,25 +84,47 @@ int main()
   */
 
   scanf("HAND [ %[^\n]", temp);
+  scanf(" TABLE %s\n", cardTable);
+  printf("Card Table: %s\n", cardTable);
+  printf("Passa aqui");
+
   char *card;
+  
   cartasArquivo = fopen("\Arquivos\cartas.txt", "w");
-  if(cartasArquivo != NULL){
-    printf("Abriu");
-  }else{
+  if (cartasArquivo == NULL)
+  {
     printf("Error ao abrir o arquivo");
   }
   card = strtok(temp, " ");
   fprintf(cartasArquivo, "%s\n", card);
+
   while (card != NULL)
   {
+    printf("%s\n", card);
     card = strtok(NULL, " ");
+    if (strcmp(card, "]") == 0)
+    {
+      printf("Entrou no break");
+      break;
+    }
     printf("Chegou aqui\n");
     fprintf(cartasArquivo, "%s\n", card);
   }
-  fclose( cartasArquivo );
-  printf("Artquivo fechado");
+  fclose(cartasArquivo);
+
+  cartasArquivo = fopen("\Arquivos\cartas.txt", "r");
+  if (cartasArquivo == NULL)
+  {
+    printf("Error ao abrir o arquivo\n");
+  }
+  char c;
+  while ((c = fgetc(cartasArquivo)) != EOF)
+  {
+    printf("%c", c);
+  }
+  fclose(cartasArquivo);
+  printf("Chegou aqui, antes do table\n");
   // Lê a carta aberta sobre a mesa. Ex: TABLE 8♣
-  // scanf("TABLE %s\n", temp);
 
   // === PARTIDA ===
 
