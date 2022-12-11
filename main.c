@@ -1,4 +1,4 @@
-ha/********************************************************************
+/********************************************************************
   Bot-exemplo do jogo Uno
 
   Esta é uma versão do jogo de baralho Uno, com algumas diferenças:
@@ -64,9 +64,10 @@ int main()
 
   FILE *playersArquivo;
   FILE *cartasArquivo;
-  
+
   char temp[MAX_LINE];
   char cardTable[5];
+  char players[MAX_LINE];
   char my_id[MAX_ID_SIZE];
 
   setbuf(stdin, NULL);
@@ -82,14 +83,22 @@ int main()
   HAND [ 4♥ 7♦ 2♣ V♠ A♥ 3♦ 2♣ 9♠ ]
   TABLE 8♦
   */
-
-  scanf("HAND [ %[^\n]", temp);
-  scanf(" TABLE %s\n", cardTable);
+  scanf("PLAYERS %[^\n]", players);
+  scanf("HAND [ %[^\n]\n", temp);
+  scanf("TABLE %s", cardTable);
   printf("Card Table: %s\n", cardTable);
   printf("Passa aqui");
 
-  char *card;
-  
+  char *card, *player;
+  playersArquivo = fopen("\Arquivos\players.txt", "w");
+
+  if (playersArquivo == NULL)
+  {
+    printf("Error ao abrir o arquivo");
+  }
+  player = strtok(players, " ");
+  fprint(playersArquivo, "%s\n", player);
+
   cartasArquivo = fopen("\Arquivos\cartas.txt", "w");
   if (cartasArquivo == NULL)
   {
