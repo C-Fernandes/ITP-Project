@@ -90,7 +90,7 @@ int main()
   printf("Passa aqui");
 
   char *card, *player;
-  playersArquivo = fopen("\Arquivos\players.txt", "w");
+  playersArquivo = fopen("\\Arquivos\\players.txt", "w");
 
   if (playersArquivo == NULL)
   {
@@ -99,7 +99,7 @@ int main()
   player = strtok(players, " ");
   fprint(playersArquivo, "%s\n", player);
 
-  cartasArquivo = fopen("\Arquivos\cartas.txt", "w");
+  cartasArquivo = fopen("\\Arquivos\\cartas.txt", "w");
   if (cartasArquivo == NULL)
   {
     printf("Error ao abrir o arquivo");
@@ -121,7 +121,7 @@ int main()
   }
   fclose(cartasArquivo);
 
-  cartasArquivo = fopen("\Arquivos\cartas.txt", "r");
+  cartasArquivo = fopen("\\Arquivos\\cartas.txt", "r");
   if (cartasArquivo == NULL)
   {
     printf("Error ao abrir o arquivo\n");
