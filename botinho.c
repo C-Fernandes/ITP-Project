@@ -45,6 +45,7 @@
  ********************************************************************/
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #define MAX_LINE 100
@@ -62,8 +63,8 @@ void debug(char *message)
 int main()
 {
 
-  FILE *playersArquivo;
-  FILE *cartasArquivo;
+  FILE *mesa;
+  FILE *dados_partida;
 
   char hand[MAX_LINE];
   char cardTable[MAX_ACTION];
@@ -78,20 +79,33 @@ int main()
 
   /*
   Um exemplo de dados iniciais é:
-  PLAYERS b1 b2 b3
-  YOU b1
-  HAND [ 4♥ 7♦ 2♣ V♠ A♥ 3♦ 2♣ 9♠ ]
-  TABLE 8♦
+PLAYERS b1 b2 b3
+YOU b1
+HAND [ 4♥ 7♦ 2♣ V♠ A♥ 3♦ 2♣ 9♠ ]
+TABLE 8♦
   */
+
+  //TESTES DE ENTRADA ABAIXO:
   scanf("PLAYERS %[^\n]\n", players);
   scanf("YOU %[^\n]\n", my_id);
   scanf("HAND %[^\n]\n", hand);
   scanf("TABLE %[^\n]", cardTable);
+
+  /*
   printf("PLAYERS: %s\n", players);
   printf("YOU: %s\n", my_id);
   printf("HAND: %s\n", hand);
   printf("TABLE: %s\n", cardTable);
-  printf("Passa aqui");
+  */
+
+  //INSERÇÃO DE DADOS NOS ARQUIVOS .txt:
+  dados_partida = fopen("dados_partida.txt", "w");
+  fprintf(dados_partida, "%s\n%s\n%s\n%s", players, my_id, hand, cardTable);
+
+  fclose(dados_partida);
+  if(dados_partida != NULL){
+    exit(0);
+  }
 
   /*char *card, *player;
   playersArquivo = fopen("\\Arquivos\\players.txt", "w");
