@@ -65,8 +65,8 @@ int main()
   FILE *playersArquivo;
   FILE *cartasArquivo;
 
-  char temp[MAX_LINE];
-  char cardTable[5];
+  char hand[MAX_LINE];
+  char cardTable[MAX_ACTION];
   char players[MAX_LINE];
   char my_id[MAX_ID_SIZE];
 
@@ -83,13 +83,17 @@ int main()
   HAND [ 4♥ 7♦ 2♣ V♠ A♥ 3♦ 2♣ 9♠ ]
   TABLE 8♦
   */
-  scanf("PLAYERS %[^\n]", players);
-  scanf("HAND [ %[^\n]\n", temp);
-  scanf("TABLE %s", cardTable);
-  printf("Card Table: %s\n", cardTable);
+  scanf("PLAYERS %[^\n]\n", players);
+  scanf("YOU %[^\n]\n", my_id);
+  scanf("HAND %[^\n]\n", hand);
+  scanf("TABLE %[^\n]", cardTable);
+  printf("PLAYERS: %s\n", players);
+  printf("YOU: %s\n", my_id);
+  printf("HAND: %s\n", hand);
+  printf("TABLE: %s\n", cardTable);
   printf("Passa aqui");
 
-  char *card, *player;
+  /*char *card, *player;
   playersArquivo = fopen("\\Arquivos\\players.txt", "w");
 
   if (playersArquivo == NULL)
@@ -97,7 +101,7 @@ int main()
     printf("Error ao abrir o arquivo");
   }
   player = strtok(players, " ");
-  fprint(playersArquivo, "%s\n", player);
+  fprintf(playersArquivo, "%s\n", player);
 
   cartasArquivo = fopen("\\Arquivos\\cartas.txt", "w");
   if (cartasArquivo == NULL)
@@ -132,7 +136,7 @@ int main()
     printf("%c", c);
   }
   fclose(cartasArquivo);
-  printf("Chegou aqui, antes do table\n");
+  printf("Chegou aqui, antes do table\n");*/
   // Lê a carta aberta sobre a mesa. Ex: TABLE 8♣
 
   // === PARTIDA ===
