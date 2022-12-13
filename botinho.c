@@ -64,11 +64,8 @@ int main()
 {
 
   FILE *mesa;
-  FILE *dados_partida;
+  FILE *dados_partida, *playersArquivo, *cartasArquivo;
   char **cartas_na_mao;
-
-  
-
 
   char hand[MAX_LINE];
   char cardTable[MAX_ACTION];
@@ -89,7 +86,7 @@ HAND [ 4♥ 7♦ 2♣ V♠ A♥ 3♦ 2♣ 9♠ ]
 TABLE 8♦
   */
 
-  //TESTES DE ENTRADA ABAIXO:
+  // TESTES DE ENTRADA ABAIXO:
   scanf("PLAYERS %[^\n]\n", players);
   scanf("YOU %[^\n]\n", my_id);
   scanf("HAND %[^\n]\n", hand);
@@ -102,16 +99,9 @@ TABLE 8♦
   printf("TABLE: %s\n", cardTable);
   */
 
-  //INSERÇÃO DE DADOS NOS ARQUIVOS .txt:
-  dados_partida = fopen("dados_partida.txt", "w");
-  fprintf(dados_partida, "%s\n%s\n%s\n%s", players, my_id, hand, cardTable);
+  // INSERÇÃO DE DADOS NOS ARQUIVOS .txt:
 
-  fclose(dados_partida);
-  if(dados_partida != NULL){
-    exit(0);
-  }
-
-  /*char *card, *player;
+  char *card, *player;
   playersArquivo = fopen("\\Arquivos\\players.txt", "w");
 
   if (playersArquivo == NULL)
@@ -126,7 +116,7 @@ TABLE 8♦
   {
     printf("Error ao abrir o arquivo");
   }
-  card = strtok(temp, " ");
+  card = strtok(hand, " ");
   fprintf(cartasArquivo, "%s\n", card);
 
   while (card != NULL)
@@ -135,10 +125,10 @@ TABLE 8♦
     card = strtok(NULL, " ");
     if (strcmp(card, "]") == 0)
     {
-      printf("Entrou no break");
+
       break;
     }
-    printf("Chegou aqui\n");
+
     fprintf(cartasArquivo, "%s\n", card);
   }
   fclose(cartasArquivo);
@@ -154,7 +144,14 @@ TABLE 8♦
     printf("%c", c);
   }
   fclose(cartasArquivo);
-  printf("Chegou aqui, antes do table\n");*/
+  dados_partida = fopen("\\Arquivos\\dados_partida.txt", "w");
+  fprintf(dados_partida, "%s\n%s\n%s\n%s", players, my_id, hand, cardTable);
+
+  fclose(dados_partida);
+  if (dados_partida != NULL)
+  {
+    exit(0);
+  }
   // Lê a carta aberta sobre a mesa. Ex: TABLE 8♣
 
   // === PARTIDA ===
@@ -178,6 +175,7 @@ TABLE 8♦
     // É preciso, então, de um laço enquanto a vez do seu bot não chega.
     do
     {
+
       /*
       Enquanto não chega a vez do seu bot, ele estará "escutando" todos os eventos
       do jogo. Estes eventos são repassados para todos os bots em uma linha no formato:
@@ -202,6 +200,24 @@ TABLE 8♦
       */
 
       scanf("%s %s", action, complement);
+
+      if (strcmp(action, "TURN") == 0)
+      {
+        player = complement;
+      }
+      if (strcmp(action, "DISCARD") == 0) // Salvar a carta nos DISCARD
+      {
+        playersArquivo = fopen("\\Arquivos\\players.txt", "a");
+
+        if (playersArquivo == NULL)
+        {
+          printf("Error ao abrir o arquivo");
+        }
+        player = strtok(players, " ");
+        fprintf(playersArquivo, "%s-%s\n", player, complement);
+        fclose(playersArquivo);
+        strcpy(cardTable, complement); // A nova carta na mesa vai ser a que jogaram
+      }
       // obs: um segundo scanf pode ser realizado par ler o 2º complemento.
 
       /*
@@ -210,7 +226,7 @@ TABLE 8♦
       O simulador envia esta mensagem quando for a vez do bot de identificador <id>.
       Então, termine este laço interno quando for a vez do seu bot agir.
       */
-    } while (strcmp(action, "TURN") || strcmp(complement, my_id));
+    } while (strcmp(action, "TURN") && strcmp(complement, my_id));
 
     // agora é a vez do seu bot jogar
     debug("----- MINHA VEZ -----");
