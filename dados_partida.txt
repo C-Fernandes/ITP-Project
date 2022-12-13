@@ -1,4 +1,4 @@
-b1 b2 b3
-b1
-[ 4♥ 7♦ 2♣ V♠ A♥ 3♦ 2♣ 9♠ ]
-8♦
+bot_A botinho
+botinho
+[ 9♣ V♦ 2♥ A♦ 3♦ 3♠ 9♠ ]
+A♠

@@ -65,6 +65,10 @@ int main()
 
   FILE *mesa;
   FILE *dados_partida;
+  char **cartas_na_mao;
+
+  
+
 
   char hand[MAX_LINE];
   char cardTable[MAX_ACTION];
