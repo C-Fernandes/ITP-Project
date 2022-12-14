@@ -146,15 +146,7 @@ TABLE 8♦
   }
   fclose(cartasArquivo);
 
-  dados_partida = fopen("Arquivos/dados_partida.txt", "w");
-  fprintf(dados_partida, "%s\n%s\n%s\n%s", players, my_id, hand, cardTable);
-
-  fclose(dados_partida);
-
-  if (dados_partida != NULL)
-  {
-    exit(0);
-  }
+  
   // Lê a carta aberta sobre a mesa. Ex: TABLE 8♣
 
   // === PARTIDA ===
@@ -172,6 +164,10 @@ TABLE 8♦
   Nesse último caso, ganha quem tiver menos cartas na mão. Em caso de mais de um bot ter o menor
   número de cartas na mão, todos eles são considerados os ganhadores.
   */
+
+  //Comando de saída temporário, para evitar loop infinito:
+  exit(0);
+
   while (1)
   {
     // A primeira coisa fazer é "esperar sua vez".
@@ -327,8 +323,13 @@ TABLE 8♦
 
     // Nesse exemplo de ação, o bot tenta descartar a carta 4♥.
     // Se ele não tiver na mão, a ação é simplesmente ignorada.
-    char card[] = "A♥ ♥";
+
+    
+
+    char msg1[] = "Mensagem_teste!";
+
     printf("DISCARD %s\n", card);
+    //printf("SAY %s\n", msg1);
   }
 
   return 0;
