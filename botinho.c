@@ -102,22 +102,22 @@ TABLE 8♦
   // INSERÇÃO DE DADOS NOS ARQUIVOS .txt:
 
   char *card, *player;
-  playersArquivo = fopen("\\Arquivos\\players.txt", "w");
+  playersArquivo = fopen("Arquivos/players.txt", "w");
 
   if (playersArquivo == NULL)
   {
     printf("Error ao abrir o arquivo");
   }
-  player = strtok(players, " ");
-  fprintf(playersArquivo, "%s\n", player);
 
-  cartasArquivo = fopen("\\Arquivos\\cartas.txt", "w");
+  fprintf(playersArquivo, "%s", players);
+
+  cartasArquivo = fopen("Arquivos/cartas.txt", "w");
   if (cartasArquivo == NULL)
   {
     printf("Error ao abrir o arquivo");
   }
   card = strtok(hand, " ");
-  fprintf(cartasArquivo, "%s\n", card);
+  fprintf(cartasArquivo, "%s", card);
 
   while (card != NULL)
   {
@@ -129,11 +129,12 @@ TABLE 8♦
       break;
     }
 
-    fprintf(cartasArquivo, "%s\n", card);
+      fprintf(cartasArquivo, "%s\n", card);
+    
   }
   fclose(cartasArquivo);
 
-  cartasArquivo = fopen("\\Arquivos\\cartas.txt", "r");
+  cartasArquivo = fopen("Arquivos/cartas.txt", "r");
   if (cartasArquivo == NULL)
   {
     printf("Error ao abrir o arquivo\n");
@@ -144,10 +145,12 @@ TABLE 8♦
     printf("%c", c);
   }
   fclose(cartasArquivo);
-  dados_partida = fopen("\\Arquivos\\dados_partida.txt", "w");
+
+  dados_partida = fopen("Arquivos/dados_partida.txt", "w");
   fprintf(dados_partida, "%s\n%s\n%s\n%s", players, my_id, hand, cardTable);
 
   fclose(dados_partida);
+
   if (dados_partida != NULL)
   {
     exit(0);
@@ -207,7 +210,7 @@ TABLE 8♦
       }
       if (strcmp(action, "DISCARD") == 0) // Salvar a carta nos DISCARD
       {
-        playersArquivo = fopen("\\Arquivos\\players.txt", "a");
+        playersArquivo = fopen("Arquivos/players.txt", "a");
 
         if (playersArquivo == NULL)
         {
