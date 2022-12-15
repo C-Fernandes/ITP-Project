@@ -1,1 +1,1 @@
-bot_A botinho
+botinho bot_A

@@ -64,6 +64,12 @@ int main()
 {
 
   FILE *mesa;
+  char tiposDeCartas = {'A', '2', '3', '4', ' 5', '6',
+                        '7', '8', '9', '10', 'V', 'D', 'R', 'C'};
+  char tiposDeNaipes[4][4] = {{"♥"},
+                              {"♦"},
+                              {"♣"},
+                              {"♠"}};
   FILE *dados_partida, *playersArquivo, *cartasArquivo;
   char **cartas_na_mao;
 
@@ -92,17 +98,9 @@ TABLE 8♦
   scanf("HAND %[^\n]\n", hand);
   scanf("TABLE %[^\n]", cardTable);
 
-  /*
-  printf("PLAYERS: %s\n", players);
-  printf("YOU: %s\n", my_id);
-  printf("HAND: %s\n", hand);
-  printf("TABLE: %s\n", cardTable);
-  */
-
-  // INSERÇÃO DE DADOS NOS ARQUIVOS .txt:
-
-  char *card, *player;
+  char *card, *player, naipeDaVez[4];
   playersArquivo = fopen("Arquivos/players.txt", "w");
+  int quantCartas = 0;
 
   if (playersArquivo == NULL)
   {
@@ -117,20 +115,16 @@ TABLE 8♦
     printf("Error ao abrir o arquivo");
   }
   card = strtok(hand, " ");
-  fprintf(cartasArquivo, "%s", card);
-
   while (card != NULL)
   {
-    printf("%s\n", card);
     card = strtok(NULL, " ");
     if (strcmp(card, "]") == 0)
     {
-
       break;
     }
 
-      fprintf(cartasArquivo, "%s\n", card);
-    
+    fprintf(cartasArquivo, "%s\n", card);
+    quantCartas++;
   }
   fclose(cartasArquivo);
 
@@ -146,7 +140,6 @@ TABLE 8♦
   }
   fclose(cartasArquivo);
 
-  
   // Lê a carta aberta sobre a mesa. Ex: TABLE 8♣
 
   // === PARTIDA ===
@@ -165,7 +158,7 @@ TABLE 8♦
   número de cartas na mão, todos eles são considerados os ganhadores.
   */
 
-  //Comando de saída temporário, para evitar loop infinito:
+  // Comando de saída temporário, para evitar loop infinito:
   exit(0);
 
   while (1)
@@ -174,29 +167,6 @@ TABLE 8♦
     // É preciso, então, de um laço enquanto a vez do seu bot não chega.
     do
     {
-
-      /*
-      Enquanto não chega a vez do seu bot, ele estará "escutando" todos os eventos
-      do jogo. Estes eventos são repassados para todos os bots em uma linha no formato:
-        <ação> <complemento1> [complemento2]
-
-      Ou seja, <ação> <complemento1> estão sempre presentes na mensagem do evento, porém
-      a presença de [complemento2] vai depender da ação e do complemento1.
-      Por exemplo, se um bot descartar um 7 de paus, será gerado o seguinte evento:
-        DISCARD 7♣
-      A ação é DISCARD e o complemento é 7♣. Portanto, o próximo bot deverá descartar ou
-      um 7 (de qualquer naipe) ou uma carta do naipe ♣. Guarde essa informação porque o
-      próximo bot poderá ser o seu.
-
-      Se a carta descartada for, por exemplo, A♣ (Ás = muda de cor), haverá um segundo
-      complemento com o naipe a ser seguido pelos próximos jogadores. Por exemplo: no
-      evento "DISCARD A♣ ♥", o próximo bot deverá então descartar alguma carta do naipe ♥.
-
-      O valor da carta descartada pode também pedir uma ação do próximo jogador. Por
-      exemplo, se for descartado o V (valete = compre 2), a primeira ação do próximo
-      bot (pode ser o seu) deverá ser obrigatoriamente "BUY 2", sob pena do bot ser
-      eliminado da partida.
-      */
 
       scanf("%s %s", action, complement);
 
@@ -216,20 +186,30 @@ TABLE 8♦
         fprintf(playersArquivo, "%s-%s\n", player, complement);
         fclose(playersArquivo);
         strcpy(cardTable, complement); // A nova carta na mesa vai ser a que jogaram
-      }
-      // obs: um segundo scanf pode ser realizado par ler o 2º complemento.
 
-      /*
-      Há um evento especial que não é gerado pelos outros bots, mas pelo simulador.
-      Ele tem o formato: "TURN <id>".
-      O simulador envia esta mensagem quando for a vez do bot de identificador <id>.
-      Então, termine este laço interno quando for a vez do seu bot agir.
-      */
+        if (cardTable == "A♣")
+        {
+          scanf(" %s\n", naipeDaVez);
+        }
+      }
+
     } while (strcmp(action, "TURN") && strcmp(complement, my_id));
 
     // agora é a vez do seu bot jogar
     debug("----- MINHA VEZ -----");
-
+    for (int i = 0; i < 4; i++)
+    {
+      if (strcmp(cardTable, strcat("V", tiposDeNaipes[i]) == 0))
+      {
+        printf("BUY 2");
+        break;
+      }
+      if (strcmp(cardTable, strcat("C", tiposDeNaipes[i]) == 0))
+      {
+        printf("BUY 4");
+        break;
+      }
+    }
     /*
     Seu bot realiza uma ação no jogo enviando para a saída-padrão uma string no formato:
       <ação> <complemento1> [complemento2]
@@ -324,12 +304,10 @@ TABLE 8♦
     // Nesse exemplo de ação, o bot tenta descartar a carta 4♥.
     // Se ele não tiver na mão, a ação é simplesmente ignorada.
 
-    
-
     char msg1[] = "Mensagem_teste!";
 
     printf("DISCARD %s\n", card);
-    //printf("SAY %s\n", msg1);
+    // printf("SAY %s\n", msg1);
   }
 
   return 0;
