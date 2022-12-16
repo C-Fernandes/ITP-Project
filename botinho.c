@@ -55,48 +55,61 @@
 #define true 1
 #define false 0
 
+char tiposDeCartas = {'A', '2', '3', '4', ' 5', '6',
+                      '7', '8', '9', '10', 'V', 'D', 'R', 'C'};
+char tiposDeNaipes[4][4] = {{"♥"},
+                            {"♦"},
+                            {"♣"},
+                            {"♠"}};
 void debug(char *message)
 {
   fprintf(stderr, "%s\n", message);
+}
+void encontrarCarta(char cardTable[])
+{
+}
+
+int adicionarCartasArquivo(char hand[], FILE *cartasArquivo, char tipoAbertura)
+{
+  int quantCartas = 0;
+  char *card;
+  cartasArquivo = fopen("Arquivos/cartas.txt", tipoAbertura);
+  if (cartasArquivo == NULL)
+  {
+    printf("Error ao abrir o arquivo");
+  }
+  card = strtok(hand, " ");
+  while (card != NULL)
+  {
+    card = strtok(NULL, " ");
+    if (strcmp(card, "]") == 0)
+    {
+      break;
+    }
+
+    fprintf(cartasArquivo, "%s\n", card);
+    quantCartas++;
+  }
+  fclose(cartasArquivo);
+  return quantCartas;
 }
 
 int main()
 {
 
-  FILE *mesa;
-  char tiposDeCartas = {'A', '2', '3', '4', ' 5', '6',
-                        '7', '8', '9', '10', 'V', 'D', 'R', 'C'};
-  char tiposDeNaipes[4][4] = {{"♥"},
-                              {"♦"},
-                              {"♣"},
-                              {"♠"}};
-  FILE *dados_partida, *playersArquivo, *cartasArquivo;
-  char **cartas_na_mao;
+  FILE *playersArquivo, *cartasArquivo;
 
-  char hand[MAX_LINE];
-  char cardTable[MAX_ACTION];
-  char players[MAX_LINE];
-  char my_id[MAX_ID_SIZE];
+  int continua = true;
+  char hand[MAX_LINE], cardTable[MAX_ACTION], players[MAX_LINE], my_id[MAX_ID_SIZE];
 
   setbuf(stdin, NULL);
   setbuf(stdout, NULL);
   setbuf(stderr, NULL);
 
-  // === INÍCIO DA PARTIDA ===
-
-  /*
-  Um exemplo de dados iniciais é:
-PLAYERS b1 b2 b3
-YOU b1
-HAND [ 4♥ 7♦ 2♣ V♠ A♥ 3♦ 2♣ 9♠ ]
-TABLE 8♦
-  */
-
-  // TESTES DE ENTRADA ABAIXO:
   scanf("PLAYERS %[^\n]\n", players);
   scanf("YOU %[^\n]\n", my_id);
   scanf("HAND %[^\n]\n", hand);
-  scanf("TABLE %[^\n]", cardTable);
+  scanf("TABLE %[^\n]\n", cardTable);
 
   char *card, *player, naipeDaVez[4];
   playersArquivo = fopen("Arquivos/players.txt", "w");
@@ -108,6 +121,7 @@ TABLE 8♦
   }
 
   fprintf(playersArquivo, "%s", players);
+  fclose(playersArquivo);
 
   cartasArquivo = fopen("Arquivos/cartas.txt", "w");
   if (cartasArquivo == NULL)
@@ -128,22 +142,6 @@ TABLE 8♦
   }
   fclose(cartasArquivo);
 
-  cartasArquivo = fopen("Arquivos/cartas.txt", "r");
-  if (cartasArquivo == NULL)
-  {
-    printf("Error ao abrir o arquivo\n");
-  }
-  char c;
-  while ((c = fgetc(cartasArquivo)) != EOF)
-  {
-    printf("%c", c);
-  }
-  fclose(cartasArquivo);
-
-  // Lê a carta aberta sobre a mesa. Ex: TABLE 8♣
-
-  // === PARTIDA ===
-
   char id[MAX_ID_SIZE];
   char action[MAX_ACTION];
   char complement[MAX_LINE];
@@ -158,18 +156,14 @@ TABLE 8♦
   número de cartas na mão, todos eles são considerados os ganhadores.
   */
 
-  // Comando de saída temporário, para evitar loop infinito:
-  exit(0);
-
   while (1)
   {
-    // A primeira coisa fazer é "esperar sua vez".
-    // É preciso, então, de um laço enquanto a vez do seu bot não chega.
     do
     {
-
+      debug("Entrou aqui");
       scanf("%s %s", action, complement);
-
+      debug(action);
+      debug(complement);
       if (strcmp(action, "TURN") == 0)
       {
         player = complement;
@@ -193,22 +187,35 @@ TABLE 8♦
         }
       }
 
-    } while (strcmp(action, "TURN") && strcmp(complement, my_id));
-
+    } while ((strcmp(action, "TURN") == 0) && (strcmp(complement, my_id) == 0));
+    continua = true;
     // agora é a vez do seu bot jogar
     debug("----- MINHA VEZ -----");
     for (int i = 0; i < 4; i++)
     {
       if (strcmp(cardTable, strcat("V", tiposDeNaipes[i]) == 0))
       {
-        printf("BUY 2");
-        break;
+        printf("BUY 2\n");
+        continua == false;
       }
       if (strcmp(cardTable, strcat("C", tiposDeNaipes[i]) == 0))
       {
-        printf("BUY 4");
+        printf("BUY 4\n");
+
+        continua == false;
+      }
+      if (continua == false)
+      {
+        scanf("HAND %[^\n]\n", hand);
+        adicionarCartasArquivo(hand, cartasArquivo, "a");
         break;
       }
+    }
+    if (continua == true)
+    {
+      printf("BUY 1\n");
+      scanf("HAND %[^\n]\n", hand);
+      adicionarCartasArquivo(hand, cartasArquivo, "a");
     }
     /*
     Seu bot realiza uma ação no jogo enviando para a saída-padrão uma string no formato:
