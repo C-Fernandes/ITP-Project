@@ -47,6 +47,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <error.h>
+#include <err.h>
 
 #define MAX_LINE 100
 #define MAX_ACTION 10
@@ -97,6 +99,7 @@ int adicionarCartasArquivo(char hand[], FILE *cartasArquivo, char tipoAbertura)
 int main()
 {
 
+  debug("Ta atualizando correto!");
   FILE *playersArquivo, *cartasArquivo;
 
   int continua = true;
@@ -107,11 +110,12 @@ int main()
   setbuf(stderr, NULL);
 
   scanf("PLAYERS %[^\n]\n", players);
-  scanf("YOU %[^\n]\n", my_id);
+  scanf("YOU %s\n", my_id);
   scanf("HAND %[^\n]\n", hand);
-  scanf("TABLE %[^\n]\n", cardTable);
+  scanf("TABLE %s\n", cardTable);
 
   char *card, *player, naipeDaVez[4];
+
   playersArquivo = fopen("Arquivos/players.txt", "w");
   int quantCartas = 0;
 
@@ -187,7 +191,7 @@ int main()
         }
       }
 
-    } while ((strcmp(action, "TURN") == 0) && (strcmp(complement, my_id) == 0));
+    } while (strcmp(action, "TURN") || strcmp(complement, my_id));
     continua = true;
     // agora é a vez do seu bot jogar
     debug("----- MINHA VEZ -----");
@@ -307,13 +311,14 @@ int main()
     (o bot esperando um dado do simulador e o simulador esperando um dado do bot).
     Nesse caso, o bot também será removido da partida.
     */
-w
     // Nesse exemplo de ação, o bot tenta descartar a carta 4♥.
     // Se ele não tiver na mão, a ação é simplesmente ignorada.
 
-    char msg1[] = "Mensagem_teste";
+    //char msg1[] = "Mensagem_teste";
 
-    printf("DISCARD %s\n", card);
+    printf("BUY 1\n");
+
+    //printf("DISCARD %s\n", card);
     // printf("SAY %s\n", msg1);
   }
 
