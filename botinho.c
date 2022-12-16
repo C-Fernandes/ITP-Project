@@ -307,11 +307,11 @@ int main()
     (o bot esperando um dado do simulador e o simulador esperando um dado do bot).
     Nesse caso, o bot também será removido da partida.
     */
-
+w
     // Nesse exemplo de ação, o bot tenta descartar a carta 4♥.
     // Se ele não tiver na mão, a ação é simplesmente ignorada.
 
-    char msg1[] = "Mensagem_teste!";
+    char msg1[] = "Mensagem_teste";
 
     printf("DISCARD %s\n", card);
     // printf("SAY %s\n", msg1);
